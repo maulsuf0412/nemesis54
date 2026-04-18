@@ -1,0 +1,41 @@
+name: Update Data SiRUP → SQLite
+
+on:
+  schedule:
+    - cron: '0 19 * * *'   # Jam 02:00 WIB setiap hari
+  workflow_dispatch:        # Bisa trigger manual
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Fetch data SiRUP & build SQLite
+        working-directory: backend
+        env:
+          AUDIT_DATASET_YEAR: '2026'
+        run: node scripts/fetch-sirup.js
+
+      - name: Commit & push SQLite
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add backend/data/dashboard.sqlite
+          git diff --staged --quiet || git commit -m "chore: update dashboard.sqlite $(date '+%Y-%m-%d')"
+          git push
