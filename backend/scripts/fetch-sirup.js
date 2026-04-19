@@ -14,8 +14,8 @@ const DATA_DIR = path.resolve(__dirname, "../data");
 const DB_PATH = path.join(DATA_DIR, "dashboard.sqlite");
 
 // ⬇️ Ganti dengan URL Worker kamu
-const WORKER_URL = process.env.SIRUP_PROXY_URL || "https://sirup-proxy.5554230075.workers.dev/";
-const SIRUP_BASE = `${https://sirup-proxy.5554230075.workers.dev/}/sirup/ro/publicsipd`;
+const WORKER_URL = process.env.SIRUP_PROXY_URL || "https://sirup-proxy.5554230075.workers.dev";
+const SIRUP_BASE = `${WORKER_URL}/sirup/ro/publicsipd`;
 
 // ─── HTTP helper ──────────────────────────────────────────────────────────────
 
