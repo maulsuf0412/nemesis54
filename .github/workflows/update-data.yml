@@ -39,3 +39,11 @@ jobs:
           git add backend/data/dashboard.sqlite
           git diff --staged --quiet || git commit -m "chore: update dashboard.sqlite $(date '+%Y-%m-%d')"
           git push
+
+          - name: Fetch data SiRUP & build SQLite
+        working-directory: backend
+        env:
+          AUDIT_DATASET_YEAR: '2026'
+          SIRUP_PROXY_URL: ${{ secrets.SIRUP_PROXY_URL }}
+        run: node scripts/fetch-sirup.js
+
